@@ -28,7 +28,7 @@ export default class CreateTask extends Component {
             if (response.data.length > 0) {
                 this.setState({
                     users: response.data.map(user => user.username),
-                    username: response.data[0]
+                    username: response.data[0].username
                 })
             }
         })
@@ -52,9 +52,9 @@ export default class CreateTask extends Component {
         });
     }
 
-    onChangeDueDate(e) {
+    onChangeDueDate(due_date) {
         this.setState({
-            due_date: this.due_date
+            due_date: due_date
         });
     }
 
@@ -65,12 +65,17 @@ export default class CreateTask extends Component {
             username: this.state.username,
             description: this.state.description,
             date_created: this.state.date_created,
-            due_date: this.due_date
+            due_date: this.state.due_date
         }
-
+        
         console.log(task)
 
-        window.location = '/';
+        // Send task to backend API
+        axios.post('http://localhost:5000/tasks/add', task)
+        .then(response => console.log(response.data))
+        .catch(err => console.log(err));
+
+        // window.location = '/';
     }
 
     render() {
